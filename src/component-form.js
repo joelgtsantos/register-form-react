@@ -1,7 +1,8 @@
 import React from 'react';
 import isEmail from 'validator/lib/isEmail'; //Only the email validator
 
-import Field from'./component-field';
+import Field from './component-field';
+import RegionSelect from './component-region';
 
 const content = document.createElement('div');
 document.body.appendChild(content);
@@ -12,6 +13,7 @@ class Form extends React.Component {
       name: '',
       email: '',
       password: '',
+      country: '',
     },
     fieldErrors: {},
     people: [],
@@ -31,6 +33,7 @@ class Form extends React.Component {
         name: '',
         email: '',
         password: '',
+        country: '',
       },
     });
   };
@@ -54,6 +57,7 @@ class Form extends React.Component {
     if (!person.name) return true;
     if (!person.email) return true;
     if (!person.password) return true;
+    if (!person.country) return true;
     if (errMessages.length) return true;
 
     return false;
@@ -96,14 +100,22 @@ class Form extends React.Component {
 
           <br />
 
+           <RegionSelect
+            country={this.state.fields.department}
+            state={this.state.fields.course}
+            onChange={this.onInputChange}
+          />
+
+          <br />          
+
           <input type='submit' disabled={this.validate()} />
         </form>
 
         <div>
           <h3>People</h3>
           <ul>
-            { this.state.people.map(({ name, email }, i) =>
-              <li key={i}>{name} ({email})</li>
+            { this.state.people.map(({ name, email, country }, i) =>
+              <li key={i}>{name} ({email}) {country}</li>
             ) }
           </ul>
         </div>
