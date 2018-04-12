@@ -1,4 +1,4 @@
-# register-form-react
+# Register form
 This react app provides a simple register form. Using the react paradigm it shows how to isolate in a lower level the components that compose the hole application.
 
 # The App
