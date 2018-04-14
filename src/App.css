@@ -26,3 +26,9 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+@media only screen and (min-width: 1200px){
+.ui.container {
+    width: 500px !important;
+  }
+}

@@ -68,11 +68,12 @@ class Form extends React.Component {
       <div>
         <h1>Sign Up Sheet</h1>
 
-        <form onSubmit={this.onFormSubmit}>
+        <form onSubmit={this.onFormSubmit} className='ui form'>
 
           <Field
             placeholder='Name'
             name='name'
+            type="text"
             value={this.state.fields.name}
             onChange={this.onInputChange}
             validate={(val) => (val ? false : 'Name Required')}
@@ -83,6 +84,7 @@ class Form extends React.Component {
           <Field
             placeholder='Email'
             name='email'
+            type="text"
             value={this.state.fields.email}
             onChange={this.onInputChange}
             validate={(val) => (isEmail(val) ? false : 'Invalid Email')}
@@ -95,7 +97,11 @@ class Form extends React.Component {
             name='password'
             value={this.state.fields.password}
             onChange={this.onInputChange}
-            validate={(val) => (val.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})') ? false : 'Invalid Password')}
+            type="password"
+            validate={(val) => (
+                                  val.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})') 
+                                  ? false : 'Password needs contain 1 upper, 1 lower , 1 special simbol, at least 8 characters'
+                                )}
           />
 
           <br />
@@ -104,11 +110,12 @@ class Form extends React.Component {
             country={this.state.fields.department}
             state={this.state.fields.course}
             onChange={this.onInputChange}
+            validate={(val) => (val ? false : 'Country is required')}
           />
 
           <br />          
 
-          <input type='submit' disabled={this.validate()} />
+          <input type='submit' class='ui button' disabled={this.validate()} />
         </form>
 
         <div>
