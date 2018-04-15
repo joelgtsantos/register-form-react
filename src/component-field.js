@@ -22,7 +22,7 @@ class Field extends React.Component {
     this.setState({ value: update.value });
   }
 
-  onCountryChange = (evt) => {
+  onChange = (evt) => {
     const name = this.props.name;
     
     //Get the value
@@ -44,7 +44,7 @@ class Field extends React.Component {
         <input
           placeholder={this.props.placeholder}
           value={this.state.value}
-          onChange={this.onCountryChange}
+          onChange={this.onChange}
           type={this.props.type ? this.props.type : ''}
         />
         <span style={{ color: 'red' }}>{ this.state.error }</span>
