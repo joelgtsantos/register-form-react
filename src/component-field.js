@@ -9,6 +9,7 @@ class Field extends React.Component {
     value: PropTypes.string,
     validate: PropTypes.func,
     onChange: PropTypes.func.isRequired,
+    type: PropTypes.string,
   };
 
   state = {
@@ -21,7 +22,7 @@ class Field extends React.Component {
     this.setState({ value: update.value });
   }
 
-  onChange = (evt) => {
+  onCountryChange = (evt) => {
     const name = this.props.name;
     
     //Get the value
@@ -43,7 +44,8 @@ class Field extends React.Component {
         <input
           placeholder={this.props.placeholder}
           value={this.state.value}
-          onChange={this.onChange}
+          onChange={this.onCountryChange}
+          type={this.props.type ? this.props.type : ''}
         />
         <span style={{ color: 'red' }}>{ this.state.error }</span>
       </div>

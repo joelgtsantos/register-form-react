@@ -1,7 +1,8 @@
 import React from 'react';
 import isEmail from 'validator/lib/isEmail'; //Only the email validator
 
-import Field from'./component-field';
+import Field from './component-field';
+import RegionSelect from './component-region';
 
 const content = document.createElement('div');
 document.body.appendChild(content);
@@ -12,6 +13,7 @@ class Form extends React.Component {
       name: '',
       email: '',
       password: '',
+      country: '',
     },
     fieldErrors: {},
     people: [],
@@ -31,6 +33,7 @@ class Form extends React.Component {
         name: '',
         email: '',
         password: '',
+        country: '',
       },
     });
   };
@@ -54,6 +57,7 @@ class Form extends React.Component {
     if (!person.name) return true;
     if (!person.email) return true;
     if (!person.password) return true;
+    if (!person.country) return true;
     if (errMessages.length) return true;
 
     return false;
@@ -64,11 +68,12 @@ class Form extends React.Component {
       <div>
         <h1>Sign Up Sheet</h1>
 
-        <form onSubmit={this.onFormSubmit}>
+        <form onSubmit={this.onFormSubmit} className='ui form'>
 
           <Field
             placeholder='Name'
             name='name'
+            type="text"
             value={this.state.fields.name}
             onChange={this.onInputChange}
             validate={(val) => (val ? false : 'Name Required')}
@@ -79,6 +84,7 @@ class Form extends React.Component {
           <Field
             placeholder='Email'
             name='email'
+            type="text"
             value={this.state.fields.email}
             onChange={this.onInputChange}
             validate={(val) => (isEmail(val) ? false : 'Invalid Email')}
@@ -91,19 +97,32 @@ class Form extends React.Component {
             name='password'
             value={this.state.fields.password}
             onChange={this.onInputChange}
-            validate={(val) => (val.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})') ? false : 'Invalid Password')}
+            type="password"
+            validate={(val) => (
+                                  val.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})') 
+                                  ? false : 'Password needs contain 1 upper, 1 lower , 1 special simbol, at least 8 characters'
+                                )}
           />
 
           <br />
 
-          <input type='submit' disabled={this.validate()} />
+           <RegionSelect
+            country={this.state.fields.department}
+            state={this.state.fields.course}
+            onChange={this.onInputChange}
+            validate={(val) => (val ? false : 'Country is required')}
+          />
+
+          <br />          
+
+          <input type='submit' class='ui button' disabled={this.validate()} />
         </form>
 
         <div>
           <h3>People</h3>
           <ul>
-            { this.state.people.map(({ name, email }, i) =>
-              <li key={i}>{name} ({email})</li>
+            { this.state.people.map(({ name, email, country }, i) =>
+              <li key={i}>{name} ({email}) {country}</li>
             ) }
           </ul>
         </div>
