@@ -3,7 +3,7 @@ import thunkMiddleware from 'redux-thunk';
 import { connect, Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { reducer }  from './redux-reducer';
-import { fetchPeople, savePeople }  from './redux-actions.js';
+import { fetchPeople, savePeople }  from './redux-actions';
 import Form  from './component-form';
 import './App.css';
 import './semantic-dist/semantic.min.css';

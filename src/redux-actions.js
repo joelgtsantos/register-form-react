@@ -23,12 +23,16 @@ function savePeopleSuccess (people) {
   return {type: SAVE_PEOPLE_SUCCESS, people};
 }
 
+
+
 export function fetchPeople () {
   return function (dispatch) {
     dispatch(fetchPeopleRequest())
-    apiClient.loadPeople().then((people) => {
+    return delay(2000).then(() => {
+      apiClient.loadPeople().then((people) => {
       dispatch(fetchPeopleSuccess(people))
     })
+    });
   }
 }
 
@@ -40,6 +44,10 @@ export function savePeople (people) {
       .catch((err) => { dispatch(savePeopleFailure(err)) })
   }
 }
+
+const delay = (ms) => new Promise(resolve =>
+  setTimeout(resolve, ms)
+);
 
 const apiClient = {
   loadPeople: function () {
