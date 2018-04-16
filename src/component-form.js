@@ -1,41 +1,46 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import isEmail from 'validator/lib/isEmail'; //Only the email validator
 
 import Field from './component-field';
 import RegionSelect from './component-region';
 
-const content = document.createElement('div');
-document.body.appendChild(content);
+//const content = document.createElement('div');
+//document.body.appendChild(content);
 
 class Form extends React.Component {
+
+  static propTypes = {
+    people: PropTypes.array.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    saveStatus: PropTypes.string.isRequired,
+    fields: PropTypes.object,
+    onSubmit: PropTypes.func.isRequired,
+  };
+
   state = {
-    fields: {
+    fields: this.props.fields || {
       name: '',
       email: '',
       password: '',
-      country: '',
+      country: null,
     },
-    fieldErrors: {},
-    people: [],
+    fieldErrors: {}
   };
 
+  componentWillReceiveProps(update){
+    this.setState({fields: update.fields});
+  }
+
   onFormSubmit = (evt) => {
-    const people = this.state.people;
     const person = this.state.fields;
 
     evt.preventDefault();
 
     if (this.validate()) return;
 
-    this.setState({
-      people: people.concat(person),
-      fields: {
-        name: '',
-        email: '',
-        password: '',
-        country: '',
-      },
-    });
+    this.props.onSubmit([...this.props.people, person])
   };
 
   onInputChange = ({ name, value, error }) => {
@@ -64,6 +69,14 @@ class Form extends React.Component {
   };
 
   render() {
+    if (this.props.isLoading){
+      return <img alt='loading' src='/img/loading.gif' />;
+    }
+
+    const dirty = Object.keys(this.state.fields).length;
+    let status = this.props.saveStatus;
+    if (status === 'SUCCESS' && dirty) status = 'READY';
+
     return (
       <div>
         <h1>Sign Up Sheet</h1>
@@ -107,21 +120,36 @@ class Form extends React.Component {
           <br />
 
            <RegionSelect
-            country={this.state.fields.department}
-            state={this.state.fields.course}
+            country={this.state.fields.country}
+            state={this.state.fields.state}
             onChange={this.onInputChange}
             validate={(val) => (val ? false : 'Country is required')}
           />
 
-          <br />          
+          <br />
+          {{
+            SAVING: <input value='Saving...' className='ui button' type='submit' disabled />,
+            SUCCESS: <input value='Saved!' className='ui button' type='submit' disabled />,
+            ERROR: <input
+            value='Save Failed - Retry?'
+            type='submit'
+            disabled={this.validate()}
+            className='ui button'
+            />,
+            READY: <input
+            value='Submit'
+            type='submit'
+            disabled={this.validate()}
+            className='ui button'
+            />,
 
-          <input type='submit' class='ui button' disabled={this.validate()} />
+          }[status]}
         </form>
 
         <div>
           <h3>People</h3>
           <ul>
-            { this.state.people.map(({ name, email, country }, i) =>
+            { this.props.people.map(({ name, email, country }, i) =>
               <li key={i}>{name} ({email}) {country}</li>
             ) }
           </ul>

@@ -22,6 +22,7 @@ class RegionSelect extends React.Component {
 		state: null, 
 		countries: [],
 		states: [],
+		error: null,
 		_loading: true //Presentational state convention
 	}
 
@@ -45,18 +46,27 @@ class RegionSelect extends React.Component {
   };
 
   onSelectCountry = (evt) => {
-  	const country = evt.target.value;
-  	this.setState({country});
-  	this.props.onChange({name: 'country', value: country});
+  	//get value
+  	const value = evt.target.value;
+
+  	//Error validate
+  	const error = this.props.validate ? this.props.validate(value) : false;
+
+  	//set state with a new value
+  	this.setState({ country: value, error});
+
+  	//propagate error
+  	this.props.onChange({name: 'country', value, error});
 
   }
 
 	renderCountrySelect = () => {
 		return (
-			<select 
+			<div>
+			  <select 
 				onChange={this.onSelectCountry}
 				value={this.state.country || ''}
-			>
+			  >
 				{[
 				<option value='' key='country-none'>
 					Which country?
@@ -68,7 +78,9 @@ class RegionSelect extends React.Component {
 					))
 					]
 				}
-			</select>
+			  </select>
+			  <span style={{ color: 'red' }}>{ this.state.error }</span>
+			</div>
 		);
 
 	}
